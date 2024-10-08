@@ -1,6 +1,6 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
-import Loader from 'react-loader-spinner'
+import {TailSpin} from 'react-loader-spinner'
 
 import './index.css'
 
@@ -75,7 +75,7 @@ class ProfileCard extends Component {
 
   renderLoadingView = () => (
     <div className="profile-loading-container" data-testid="loader">
-      <Loader type="ThreeDots" width="50" height="50" color="#ffffff" />
+      <TailSpin type="ThreeDots" width="50" height="50" color="#ffffff" />
     </div>
   )
 

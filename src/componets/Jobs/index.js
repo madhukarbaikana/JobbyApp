@@ -1,7 +1,7 @@
 import {Component} from 'react'
 import {BsSearch} from 'react-icons/bs'
 import Cookies from 'js-cookie'
-import Loader from 'react-loader-spinner'
+import {TailSpin} from 'react-loader-spinner'
 
 import Header from '../Header'
 import JobCard from '../JobCard'
@@ -103,7 +103,7 @@ class Jobs extends Component {
 
   renderLoadingView = () => (
     <div className="jobs-loader-container" data-testid="loader">
-      <Loader type="ThreeDots" with={50} height={50} color="#ffffff" />
+      <TailSpin type="ThreeDots" with={50} height={50} color="#ffffff" />
     </div>
   )
 
@@ -220,6 +220,17 @@ class Jobs extends Component {
     )
   }
 
+  removeEmploymentType = employmentId => {
+    this.setState(
+      prevState => ({
+        employmentTypeIds: prevState.employmentTypeIds.filter(
+          eachId => eachId !== employmentId,
+        ),
+      }),
+      this.getJobsList,
+    )
+  }
+
   render() {
     const {searchInput} = this.state
     return (
@@ -235,6 +246,7 @@ class Jobs extends Component {
               getJobsList={this.getJobsList}
               updateSalaryRange={this.onUpdateSalaryRange}
               updateEmploymentType={this.onUpdateEmploymentType}
+              removeEmploymentType={this.removeEmploymentType}
             />
 
             {this.renderSearchInputJobsContainer()}

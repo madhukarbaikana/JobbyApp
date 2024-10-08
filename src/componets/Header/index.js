@@ -1,16 +1,18 @@
 import Cookies from 'js-cookie'
-import {Link, withRouter} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {FiLogOut} from 'react-icons/fi'
 import {BsFillBriefcaseFill} from 'react-icons/bs'
 import {MdHome} from 'react-icons/md'
 
 import './index.css'
 
-const Header = props => {
+const Header = () => {
+const Navigate=useNavigate()
+
   const onClickLogout = () => {
-    const {history} = props
+   
     Cookies.remove('jwt_token')
-    history.replace('/login')
+   Navigate("/login")
   }
 
   return (
@@ -82,4 +84,4 @@ const Header = props => {
   )
 }
 
-export default withRouter(Header)
+export default Header

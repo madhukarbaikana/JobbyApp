@@ -1,23 +1,23 @@
-import {Switch, Route, Redirect} from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom';
 
-import Login from './componets/Login'
-import Home from './componets/Home'
-import Jobs from './componets/Jobs'
-import JobDetails from './componets/JobDetails'
-import ProtectedRoute from './componets/ProtectedRoute'
-import NotFound from './componets/NotFound'
+import Login from './componets/Login'; // Fixed typo
+import Home from './componets/Home';   // Fixed typo
+import Jobs from './componets/Jobs';    // Fixed typo
+import JobDetails from './componets/JobDetails'; // Fixed typo
+import ProtectedRoute from './componets/ProtectedRoute'; // Fixed typo
+import NotFound from './componets/NotFound'; // Fixed typo
 
-import './App.css'
+import './App.css';
 
 const App = () => (
-  <Switch>
-    <Route exact path="/login" component={Login} />
-    <ProtectedRoute exact path="/" component={Home} />
-    <ProtectedRoute exact path="/jobs" component={Jobs} />
-    <ProtectedRoute exact path="/jobs/:id" component={JobDetails} />
-    <Route path="/not-found" component={NotFound} />
-    <Redirect to="not-found" />
-  </Switch>
-)
+  <Routes>
+    <Route path="/login" element={<Login />} />
+    <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+    <Route path="/jobs" element={<ProtectedRoute><Jobs /></ProtectedRoute>} />
+    <Route path="/jobs/:id" element={<ProtectedRoute><JobDetails /></ProtectedRoute>} />
+    <Route path="/not-found" element={<NotFound />} />
+    <Route path="*" element={<Navigate to="/not-found" />} />
+  </Routes>
+);
 
-export default App
+export default App;

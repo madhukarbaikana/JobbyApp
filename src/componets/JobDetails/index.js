@@ -1,35 +1,35 @@
-import {Component} from 'react'
-import Cookies from 'js-cookie'
-import {MdLocationOn} from 'react-icons/md'
-import {BsFillBriefcaseFill, BsStarFill} from 'react-icons/bs'
-import {FiExternalLink} from 'react-icons/fi'
-import Loader from 'react-loader-spinner'
+import React, { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
+import { MdLocationOn } from 'react-icons/md';
+import { BsFillBriefcaseFill, BsStarFill } from 'react-icons/bs';
+import { FiExternalLink } from 'react-icons/fi';
+import { TailSpin } from 'react-loader-spinner';
+import { useParams } from 'react-router-dom';
 
-import SkillItem from '../SkillItem'
-import SimilarJobCard from "../SimilarJobCard"
-import Header from '../Header'
-import './index.css'
+import SkillItem from '../SkillItem';
+import SimilarJobCard from '../SimilarJobCard';
+import Header from '../Header';
+import './index.css';
 
 const apiStatusConstants = {
   initial: 'INITIALS',
   inProgress: 'IN_PROGRESS',
   success: 'SUCCESS',
   failure: 'FAILURE',
-}
+};
 
-class JobDetails extends Component {
-  state = {
-    jobDetails: {},
-    similarJobs: [],
-    apiStatus: apiStatusConstants.initial,
-  }
+const JobDetails = () => {
+  const [jobDetails, setJobDetails] = useState({});
+  const [similarJobs, setSimilarJobs] = useState([]);
+  const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial);
+  const { id } = useParams(); 
 
-  componentDidMount() {
-    this.getJobDetails()
-  }
+  useEffect(() => {
+    getJobDetails();
+  }, [id]);
 
-  getFormattedSimilarJobs = similarJobs =>
-    similarJobs.map(data => ({
+  const getFormattedSimilarJobs = (similarJobs) =>
+    similarJobs.map((data) => ({
       companyLogoUrl: data.company_logo_url,
       employmentType: data.employment_type,
       id: data.id,
@@ -37,9 +37,9 @@ class JobDetails extends Component {
       location: data.location,
       rating: data.rating,
       title: data.title,
-    }))
+    }));
 
-  getFormattedJobDetails = jobDetails => ({
+  const getFormattedJobDetails = (jobDetails) => ({
     companyLogoUrl: jobDetails.company_logo_url,
     companyWebsiteUrl: jobDetails.company_website_url,
     employmentType: jobDetails.employment_type,
@@ -53,82 +53,71 @@ class JobDetails extends Component {
     packagePerAnnum: jobDetails.package_per_annum,
     rating: jobDetails.rating,
     title: jobDetails.title,
-    skills: jobDetails.skills.map(eachSkill => ({
+    skills: jobDetails.skills.map((eachSkill) => ({
       name: eachSkill.name,
       imageUrl: eachSkill.image_url,
     })),
-  })
+  });
 
-  getJobDetails = async () => {
-    const jwtToken = Cookies.get('jwt_token')
-    const {match} = this.props
-    const {params} = match
-    const {id} = params
+  const getJobDetails = async () => {
+    const jwtToken = Cookies.get('jwt_token');
 
-    this.setState({apiStatus: apiStatusConstants.inProgress})
+    setApiStatus(apiStatusConstants.inProgress);
 
-    const apiUrl = `https://apis.ccbp.in/jobs/${id}`
+    const apiUrl = `https://apis.ccbp.in/jobs/${id}`;
     const options = {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
-    }
-    const response = await fetch(apiUrl, options)
+    };
+    const response = await fetch(apiUrl, options);
 
     if (response.ok) {
-      const data = await response.json()
-      const formattedJobDetails = this.getFormattedJobDetails(data.job_details)
-      const formattedSimilarJobs = this.getFormattedSimilarJobs(
-        data.similar_jobs,
-      )
+      const data = await response.json();
+      const formattedJobDetails = getFormattedJobDetails(data.job_details);
+      const formattedSimilarJobs = getFormattedSimilarJobs(data.similar_jobs);
 
-      this.setState({
-        jobDetails: formattedJobDetails,
-        similarJobs: formattedSimilarJobs,
-        apiStatus: apiStatusConstants.success,
-      })
+      setJobDetails(formattedJobDetails);
+      setSimilarJobs(formattedSimilarJobs);
+      setApiStatus(apiStatusConstants.success);
     } else {
-      this.setState({apiStatus: apiStatusConstants.failure})
+      setApiStatus(apiStatusConstants.failure);
     }
-  }
+  };
 
-  renderLoadingView = () => (
+  const renderLoadingView = () => (
     <div className="job-details-loader-container" data-testid="loader">
-      <Loader type="ThreeDots" with={50} height={50} color="#ffffff" />
+      <TailSpin type="ThreeDots" width={50} height={50} color="#ffffff" />
     </div>
-  )
+  );
 
-  renderFailureView = () => (
+  const renderFailureView = () => (
     <div className="job-details-failure-view-container">
       <img
         src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
         alt="failure view"
         className="job-details-failure-image"
       />
-      <h1 className="job-details-failure-view-heading">
-        Oops! Something Went Wrong
-      </h1>
+      <h1 className="job-details-failure-view-heading">Oops! Something Went Wrong</h1>
       <p className="job-details-failure-view-description">
         We cannot seem to find the page you are looking for
       </p>
       <button
         className="job-details-retry-button"
         type="button"
-        onClick={this.getJobDetails}
+        onClick={getJobDetails}
       >
         Retry
       </button>
     </div>
-  )
+  );
 
-  renderSuccessView = () => {
-    const {jobDetails, similarJobs} = this.state
+  const renderSuccessView = () => {
     const {
       companyLogoUrl,
       companyWebsiteUrl,
       employmentType,
-
       jobDescription,
       lifeAtCompany,
       location,
@@ -136,9 +125,9 @@ class JobDetails extends Component {
       rating,
       title,
       skills,
-    } = jobDetails
+    } = jobDetails;
 
-    const {description, imageUrl} = lifeAtCompany
+    const { description, imageUrl } = lifeAtCompany;
 
     return (
       <div className="job-details-and-similar-jobs-container">
@@ -192,7 +181,7 @@ class JobDetails extends Component {
           <h1 className="skills-heading">Skills</h1>
 
           <ul className="skills-list-container">
-            {skills.map(skill => (
+            {skills.map((skill) => (
               <SkillItem skillDetails={skill} key={skill.name} />
             ))}
           </ul>
@@ -208,37 +197,33 @@ class JobDetails extends Component {
         </div>
         <h1 className="similar-jobs-heading">Similar Jobs</h1>
         <ul className="similar-job-items-list">
-          {similarJobs.map(eachItem => (
+          {similarJobs.map((eachItem) => (
             <SimilarJobCard jobDetails={eachItem} key={eachItem.id} />
           ))}
         </ul>
       </div>
-    )
-  }
+    );
+  };
 
-  renderJobDetails = () => {
-    const {apiStatus} = this.state
-
+  const renderJobDetails = () => {
     switch (apiStatus) {
       case apiStatusConstants.inProgress:
-        return this.renderLoadingView()
+        return renderLoadingView();
       case apiStatusConstants.success:
-        return this.renderSuccessView()
+        return renderSuccessView();
       case apiStatusConstants.failure:
-        return this.renderFailureView()
+        return renderFailureView();
       default:
-        return null
+        return null;
     }
-  }
+  };
 
-  render() {
-    return (
-      <>
-        <Header />
-        <div className="job-detail-bg-container">{this.renderJobDetails()}</div>
-      </>
-    )
-  }
-}
+  return (
+    <>
+      <Header />
+      <div className="job-detail-bg-container">{renderJobDetails()}</div>
+    </>
+  );
+};
 
-export default JobDetails
+export default JobDetails;

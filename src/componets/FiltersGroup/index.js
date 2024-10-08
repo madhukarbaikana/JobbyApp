@@ -45,10 +45,14 @@ const FiltersGroup = props => {
         <h1 className="employment-type-heading">Type of Employment</h1>
         <ul className="employment-type-list-container">
           {employmentTypesList.map(eachEmployeeType => {
-            const {updateEmploymentType} = props
+            const {updateEmploymentType, removeEmploymentType} = props
             const onChangeEmploymentType = event => {
               if (event.target.checked) {
                 updateEmploymentType(event.target.value)
+               
+              } else {
+                removeEmploymentType(event.target.value)
+               
               }
             }
 
