@@ -71,3 +71,13 @@
   color: #ff0b37;
   margin-top: 5px;
 }
+
+.temporary-container{
+  display:flex;
+color:#64748b;
+margin-top:8px
+}
+.temporary-description{
+margin-left:5px;
+font-size:15px
+}

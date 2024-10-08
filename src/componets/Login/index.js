@@ -83,6 +83,11 @@ const Login = () => {
           Login
         </button>
         {showErrorMsg && <p className="error-message">*{errorMsg}</p>}
+        
+ <div className="temporary-container">
+          <p className="temporary-description">UserName: rahul</p>
+          <p className="temporary-description">Password: rahul@2021</p>
+        </div>
       </form>
     </div>
   );
