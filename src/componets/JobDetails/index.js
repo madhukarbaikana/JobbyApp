@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import { MdLocationOn } from 'react-icons/md';
 import { BsFillBriefcaseFill, BsStarFill } from 'react-icons/bs';
 import { FiExternalLink } from 'react-icons/fi';
-import { TailSpin } from 'react-loader-spinner';
+import { ThreeDots } from 'react-loader-spinner';
 import { useParams } from 'react-router-dom';
 
 import SkillItem from '../SkillItem';
@@ -88,7 +88,7 @@ const JobDetails = () => {
 
   const renderLoadingView = () => (
     <div className="job-details-loader-container" data-testid="loader">
-      <TailSpin type="ThreeDots" width={50} height={50} color="#ffffff" />
+      <ThreeDots width={50} height={50} color="#ffffff" />
     </div>
   );
 

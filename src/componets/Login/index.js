@@ -15,9 +15,9 @@ const Login = () => {
     navigate('/');
   };
 
-  const onSubmitFailure = (data) => {
+  const onSubmitFailure = (eMsg) => {
     setShowErrorMsg(true);
-    setErrorMsg(data);
+    setErrorMsg(eMsg);
   };
 
   const submitLoginDetails = async (event) => {
@@ -31,6 +31,7 @@ const Login = () => {
     };
     const response = await fetch(apiUrl, options);
     const data = await response.json();
+    console.log(data)
     if (response.ok) {
       onSubmitSuccess(data.jwt_token);
     } else {
@@ -84,7 +85,7 @@ const Login = () => {
         </button>
         {showErrorMsg && <p className="error-message">*{errorMsg}</p>}
         
- <div className="temporary-container">
+          <div className="temporary-container">
           <p className="temporary-description">UserName: rahul</p>
           <p className="temporary-description">Password: rahul@2021</p>
         </div>

@@ -45,6 +45,7 @@ const FiltersGroup = props => {
         <h1 className="employment-type-heading">Type of Employment</h1>
         <ul className="employment-type-list-container">
           {employmentTypesList.map(eachEmployeeType => {
+            
             const {updateEmploymentType, removeEmploymentType} = props
             const onChangeEmploymentType = event => {
               if (event.target.checked) {
@@ -116,7 +117,7 @@ const FiltersGroup = props => {
   return (
     <div className="filter-group-container">
       {renderSearchInput()}
-      <ProfileCard />
+     <ProfileCard />
       <hr className="horizontal-rule" />
       {renderTypeOfEmployment()}
       <hr className="horizontal-rule" />

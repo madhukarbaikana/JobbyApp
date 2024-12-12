@@ -1,6 +1,6 @@
-import {Component} from 'react'
+import {useState,useEffect} from 'react'
 import Cookies from 'js-cookie'
-import {TailSpin} from 'react-loader-spinner'
+import {ThreeDots} from 'react-loader-spinner'
 
 import './index.css'
 
@@ -10,15 +10,18 @@ const apiStatusConstants = {
   failure: 'FAILURE',
   inProgress: 'IN_PROGRESS',
 }
-class ProfileCard extends Component {
-  state = {apiStatus: apiStatusConstants.inProgress, profileData: ''}
+const ProfileCard=()=>  {
 
-  componentDidMount() {
-    this.getProfileData()
-  }
+const [apiStatus,setApiStatus]=useState(apiStatusConstants.initial)
+const [profileData,setProfileData]=useState("")
 
-  getProfileData = async () => {
-    this.setState({apiStatus: apiStatusConstants.inProgress})
+ useEffect(()=>{
+  getProfileData()
+
+},[])
+
+  const getProfileData = async () => {
+   setApiStatus(apiStatusConstants.inProgress)
     const jwtToken = Cookies.get('jwt_token')
     const url = 'https://apis.ccbp.in/profile'
     const options = {
@@ -35,21 +38,18 @@ class ProfileCard extends Component {
       const ProfileDetails = data.profile_details
       const updatedData = {
         profileImageUrl: ProfileDetails.profile_image_url,
-        shortBio: ProfileDetails.short_bio,
-        name: ProfileDetails.name,
+        shortBio:"Software Engineer" /* ProfileDetails.short_bio */,
+        name: "Madhukar Baikana"/* ProfileDetails.name */,
       }
 
-      this.setState({
-        profileData: updatedData,
-        apiStatus: apiStatusConstants.success,
-      })
+     setApiStatus(apiStatusConstants.success)
+     setProfileData(updatedData)
     } else {
-      this.setState({apiStatus: apiStatusConstants.failure})
+      setApiStatus(apiStatusConstants.failure)
     }
   }
 
-  renderSuccessView = () => {
-    const {profileData} = this.state
+ const  renderSuccessView = () => {
     const {profileImageUrl, shortBio, name} = profileData
 
     return (
@@ -61,11 +61,11 @@ class ProfileCard extends Component {
     )
   }
 
-  renderFailureView = () => (
+ const  renderFailureView = () => (
     <div className="profile-failure-container">
       <button
         type="button"
-        onClick={this.getProfileData}
+        onClick={getProfileData}
         className="profile-failure-button"
       >
         Retry
@@ -73,26 +73,23 @@ class ProfileCard extends Component {
     </div>
   )
 
-  renderLoadingView = () => (
+ const renderLoadingView = () => (
     <div className="profile-loading-container" data-testid="loader">
-      <TailSpin type="ThreeDots" width="50" height="50" color="#ffffff" />
+      <ThreeDots  width="50" height="50" color="#ffffff" />
     </div>
   )
 
-  render() {
-    const {apiStatus} = this.state
-
     switch (apiStatus) {
       case apiStatusConstants.success:
-        return this.renderSuccessView()
+        return renderSuccessView()
       case apiStatusConstants.inProgress:
-        return this.renderLoadingView()
+        return renderLoadingView()
       case apiStatusConstants.failure:
-        return this.renderFailureView()
+        return renderFailureView()
       default:
         return null
     }
-  }
+  
 }
 
 export default ProfileCard

@@ -30,7 +30,8 @@ const Navigate=useNavigate()
             <li>
               <Link to="/">
                 <MdHome className="nav-mobile-list-item" />
-              </Link>
+              </Link
+              >
             </li>
             <li>
               <Link to="/jobs">
